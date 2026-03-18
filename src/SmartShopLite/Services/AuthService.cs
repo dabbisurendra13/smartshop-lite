@@ -3,6 +3,10 @@ using SmartShopLite.Models;
 
 namespace SmartShopLite.Services
 {
+    /// <summary>
+    /// Provides a simple session-based authentication mechanism for demo purposes.
+    /// The implementation uses hard-coded credentials and is not suitable for production.
+    /// </summary>
     public class AuthService : IAuthService
     {
         private const string SessionKey = "SmartShopLite.User";
@@ -37,10 +41,13 @@ namespace SmartShopLite.Services
             Session.SetString(SessionKey, JsonSerializer.Serialize(user));
         }
 
+        /// <inheritdoc />
         public bool IsLoggedIn => CurrentUser != null;
 
+        /// <inheritdoc />
         public User? CurrentUser => LoadUser();
 
+        /// <inheritdoc />
         public bool Login(string username, string password)
         {
             // NOTE: This is a mock authentication implementation for demo purposes.
@@ -77,6 +84,7 @@ namespace SmartShopLite.Services
             return false;
         }
 
+        /// <inheritdoc />
         public void Logout()
         {
             SaveUser(null);

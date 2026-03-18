@@ -2,6 +2,9 @@ using SmartShopLite.Models;
 
 namespace SmartShopLite.Services
 {
+    /// <summary>
+    /// A simple in-memory product catalog for demo purposes.
+    /// </summary>
     public class ProductService : IProductService
     {
         private readonly List<Product> _products = new()
@@ -32,8 +35,14 @@ namespace SmartShopLite.Services
             }
         };
 
+        /// <summary>
+        /// Gets all available products.
+        /// </summary>
         public IEnumerable<Product> GetAll() => _products;
 
+        /// <summary>
+        /// Gets a single product by its identifier.
+        /// </summary>
         public Product? GetById(int id) => _products.FirstOrDefault(p => p.Id == id);
     }
 }

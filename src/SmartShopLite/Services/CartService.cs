@@ -3,16 +3,17 @@ using SmartShopLite.Models;
 
 namespace SmartShopLite.Services
 {
+    /// <summary>
+    /// A simple in-memory shopping cart implementation that stores cart items in session.
+    /// </summary>
     public class CartService : ICartService
     {
         private const string SessionKey = "SmartShopLite.Cart";
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IProductService _productService;
 
-        public CartService(IHttpContextAccessor httpContextAccessor, IProductService productService)
+        public CartService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _productService = productService;
         }
 
         private ISession Session => _httpContextAccessor.HttpContext?.Session ?? throw new InvalidOperationException("Session is not available.");
@@ -24,6 +25,7 @@ namespace SmartShopLite.Services
             {
                 return new List<CartItem>();
             }
+
             return JsonSerializer.Deserialize<List<CartItem>>(json) ?? new List<CartItem>();
         }
 
