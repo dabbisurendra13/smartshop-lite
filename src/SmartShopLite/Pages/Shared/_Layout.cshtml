@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="~/SmartShopLite.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @inject SmartShopLite.Services.IAuthService AuthService
+    @inject SmartShopLite.Services.ICartService CartService
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -27,11 +30,25 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Products/Index">Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Cart/Index">Cart</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Cart/Index">Cart (@CartService.GetCount())</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (AuthService.IsLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-dark">Hello, @AuthService.CurrentUser?.DisplayName</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Account/Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Account/Login">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -15,6 +15,7 @@ builder.Services.AddSession(options =>
 // Register application services
 builder.Services.AddSingleton<SmartShopLite.Services.IProductService, SmartShopLite.Services.ProductService>();
 builder.Services.AddScoped<SmartShopLite.Services.ICartService, SmartShopLite.Services.CartService>();
+builder.Services.AddScoped<SmartShopLite.Services.IAuthService, SmartShopLite.Services.AuthService>();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
