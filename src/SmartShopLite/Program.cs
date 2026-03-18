@@ -3,8 +3,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Add session support (used for cart storage)
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromHours(1);
+});
+
 // Register application services
 builder.Services.AddSingleton<SmartShopLite.Services.IProductService, SmartShopLite.Services.ProductService>();
+builder.Services.AddScoped<SmartShopLite.Services.ICartService, SmartShopLite.Services.CartService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -18,7 +29,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SmartShopLite.Models;
 using SmartShopLite.Services;
@@ -15,9 +16,25 @@ namespace SmartShopLite.Pages.Products
 
         public IReadOnlyList<Product> Products { get; private set; } = Array.Empty<Product>();
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchQuery { get; set; }
+
         public void OnGet()
         {
-            Products = _productService.GetAll().ToList();
+            var products = _productService.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                SearchQuery = SearchQuery.Trim();
+                Products = products
+                    .Where(p => p.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)
+                                || p.Description.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            else
+            {
+                Products = products.ToList();
+            }
         }
     }
 }

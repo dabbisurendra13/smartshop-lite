@@ -1,0 +1,57 @@
+@page
+@model SmartShopLite.Pages.Cart.IndexModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h1 class="mb-4">Shopping Cart</h1>
+
+@if (!Model.Items.Any())
+{
+    <div class="alert alert-info">Your cart is empty.</div>
+    <a class="btn btn-primary" asp-page="/Products/Index">Continue shopping</a>
+}
+else
+{
+    <form method="post">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th class="text-end">Price</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-end">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td class="text-end">@item.Price.ToString("C")</td>
+                        <td class="text-center" style="width: 140px;">
+                            <input type="number" name="quantities[@item.ProductId]" value="@item.Quantity" class="form-control form-control-sm text-center" min="0" />
+                        </td>
+                        <td class="text-end">@item.Total.ToString("C")</td>
+                        <td class="text-end">
+                            <button type="submit" name="remove" value="@item.ProductId" class="btn btn-sm btn-outline-danger">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Cart Total</td>
+                    <td class="text-end fw-bold">@Model.Total.ToString("C")</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" name="action" value="update" class="btn btn-primary">Update quantities</button>
+            <button type="submit" name="action" value="clear" class="btn btn-outline-secondary">Clear cart</button>
+        </div>
+    </form>
+}
